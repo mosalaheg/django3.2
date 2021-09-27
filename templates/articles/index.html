@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Articles - All {% endblock %}
+
+{% block content %}
+    <a href="{% url 'articles:create' %}">Create New</a><br>
+    {% if article_list %}    
+    <ul>
+        {% for article in article_list  %}
+            <li><a href="{% url 'articles:show' article.id %}">{{ article.title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+{% endblock %}
+

@@ -1,19 +1,49 @@
+import articles
 from django import http
-from articles.models import Article
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.db.models import query
+from django.shortcuts import render, get_object_or_404
+# from django.http import HttpResponse
 from .models import Article
-from django.template.loader import render_to_string, get_template
+# from django.template.loader import render_to_string, get_template
 
 # Create your views here.
 
 
 def index(request):
-    article_obj = Article.objects.get(id=1)
+    article_list = Article.objects.all()
     context = {
-        "article_obj": article_obj
+        "article_list": article_list,
     }
-    # html_string = render_to_string("index.html", context)
-    html_temp = get_template("index.html")
-    html_string =html_temp.render(context)
-    return HttpResponse(html_string)
+
+    return render(request, "articles/index.html", context)
+
+def search(request):
+    search = request.GET
+
+    queryset = get_object_or_404(Article, id= search.get("query"))
+    context = {
+        'article': queryset,
+    }
+    return render(request, "articles/search.html", context)
+
+def create(request):
+    context = {}
+    if request.method == "POST":
+        title= request.POST.get("title")
+        content= request.POST.get("content")
+        article= Article.objects.create(title= title, content= content)
+        context["article"]= article
+        context["is_created"]= True
+
+    return render(request, "articles/create.html", context)
+
+
+
+def show(request, id):
+   pass
+
+def edit(request, id):
+   pass
+
+def delete(request, id):
+    pass
