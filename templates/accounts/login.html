@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} Login to your account {% endblock %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <form action="{% url 'accounts:login' %}" method="POST">
+            {% csrf_token %}
+            <h3>Login to your account</h3>
+            {{ form.as_p }}
+            <input type="submit" value="Login">
+        </form><br><br>
+    {% else %}
+        <p>You are already logged in, if you want to logout try from here <a href="javascript: document.getElementById('logout_form').submit()">Logout</a></p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <form style="display: none" id="logout_form" action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+    </form><br><br>
+    {% endif %}
+
+{% endblock %}
+

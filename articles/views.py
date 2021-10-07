@@ -1,14 +1,10 @@
-import articles
 from django import http
-from django.db.models import query
 from django.shortcuts import render, get_object_or_404
-# from django.http import HttpResponse
 from .models import Article
-# from django.template.loader import render_to_string, get_template
+from django.contrib.auth.decorators import login_required
+from .forms import ArticleForm, ArticleModelForm
 
 # Create your views here.
-
-
 def index(request):
     article_list = Article.objects.all()
     context = {
@@ -26,12 +22,16 @@ def search(request):
     }
     return render(request, "articles/search.html", context)
 
+@login_required
 def create(request):
-    context = {}
-    if request.method == "POST":
-        title= request.POST.get("title")
-        content= request.POST.get("content")
-        article= Article.objects.create(title= title, content= content)
+    #form = ArticleForm(request.POST or None)
+    form = ArticleModelForm(request.POST or None)
+    context = {
+        "form": form,
+    }
+    if form.is_valid():
+        # print(form.cleaned_data)
+        article = form.save()
         context["article"]= article
         context["is_created"]= True
 
@@ -42,8 +42,10 @@ def create(request):
 def show(request, id):
    pass
 
+@login_required
 def edit(request, id):
    pass
 
+@login_required
 def delete(request, id):
     pass

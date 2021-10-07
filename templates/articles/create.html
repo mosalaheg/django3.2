@@ -3,21 +3,22 @@
 {% block title %} Articles - Create New {% endblock %}
 
 {% block content %}
-    {% if not is_created %}
+    <form action="{% url 'articles:create' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create New">
+    </form>
+    <!-- {% if not is_created %}
         <form action="{% url 'articles:create' %}" method="post">
             {% csrf_token %}
-            <div style="margin-bottom: 10px;">
-                <input type="text" placeholder = "Type your Title" value="{{ article.title }}" name="title">
-            </div>
-            <div style="margin-bottom: 10px;">
-            <textarea placeholder = "Content" name="content" cols="21" rows="10">{{ article.content }}</textarea>
-            </div>
+            {{ form.as_p }}
             <input type="submit" value="Create New">
         </form>
     {% else %}
         <p>Your article was created successfully.</p>
         {{ article.id }}
         <a href="{% url 'articles:show' article.id %}">{{ article.title }}</a>
-    {% endif %}
+    {% endif %} -->
+
 {% endblock %}
 
